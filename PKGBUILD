@@ -1,5 +1,6 @@
 # am33x Beaglebone and Beaglebone Black kernel and headers
-# Maintainer: Kevin Mihelich <kevin@archlinuxarm.org>
+# Maintainer: Michele Damiano Torelli <me_AT_mdtorelli_DOT_it>
+# Contributor: Kevin Mihelich <kevin@archlinuxarm.org>
 
 buildarch=4
 
@@ -9,8 +10,8 @@ pkgname=('linux-am33x' 'linux-headers-am33x')
 _kernelname=${pkgname#linux}
 _basekernel=3.8
 pkgver=${_basekernel}.13
-pkgrel=10
-bonerel=26
+pkgrel=11
+bonerel=28
 arch=('arm')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -20,16 +21,14 @@ source=("ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-${_basekernel}.tar.xz"
         "ftp://ftp.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.bz2"
         "rcn-ee.diff.gz::http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${bonerel}/patch-${pkgver}-bone${bonerel}.diff.gz"
         'config'
-        'change-default-console-loglevel.patch'
-        'aufs3-3.8.patch.xz')
+        'change-default-console-loglevel.patch')
 md5sums=('1c738edfc54e7c65faeb90c436104e2f'
          '412da22dabe4d7fcb78b3c14e53cd892'
-         'b7c3761c608670c4985e684e922376f4'
-         'bd1ff86c19c4dda4069b8bd3609d34e1'
-         '9d3c56a4b999c8bfbd4018089a62f662'
-         'd819af0969e0726cbf9ae6be5e044a75')
+         'ae2bf1e917b54ef8056fab0b9dcf1223'
+         '8c7b92c3e2f502ca7b2f35bca4bb8a33'
+         '9d3c56a4b999c8bfbd4018089a62f662')
 
-build() {
+prepare() {
   cd "${srcdir}/linux-${_basekernel}"
 
   patch -p1 -i "${srcdir}/patch-${pkgver}"
@@ -39,9 +38,9 @@ build() {
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
   patch -Np1 -i "${srcdir}/change-default-console-loglevel.patch"
 
-  # ALARM patches
-  git apply "${srcdir}/rcn-ee.diff"
-  patch -Np1 -i "${srcdir}/aufs3-3.8.patch"
+  # BONE patches
+  git init -q  # We need to run following command in a valid Git repo
+  git apply --reject "${srcdir}/rcn-ee.diff"
 
   cat "${srcdir}/config" > ./.config
 
@@ -53,6 +52,10 @@ build() {
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
+}
+
+build() {
+  cd "${srcdir}/linux-${_basekernel}"
 
   # get kernel version
   make prepare
