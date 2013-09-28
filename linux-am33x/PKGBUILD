@@ -1,61 +1,48 @@
-# am33x Beaglebone and Beaglebone Black kernel and headers
+# TI AM335x Beaglebone (Black)
 # Maintainer: Michele Damiano Torelli <me_AT_mdtorelli_DOT_it>
 # Contributor: Kevin Mihelich <kevin@archlinuxarm.org>
 
 buildarch=4
 
 pkgbase=linux-am33x
-pkgname=('linux-am33x' 'linux-headers-am33x')
-# pkgname=linux-custom       # Build kernel with a different name
-_kernelname=${pkgname#linux}
-_basekernel=3.8
-pkgver=${_basekernel}.13
-pkgrel=11
-bonerel=28
-arch=('arm')
+_kernelname=${pkgbase#linux}
+_basekernel=3.12
+_minorrel=0
+_rcrel=2
+_bonerel=2
+_srcname=linux-${_basekernel}-rc${_rcrel}
+_desc="TI AM335x Beaglebone (Black)"
+pkgver=${_basekernel}.${_minorrel}
+pkgrel=1
+arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
-makedepends=('xmlto' 'docbook-xsl' 'uboot-mkimage' 'git' 'inetutils')
+makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-source=("ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-${_basekernel}.tar.xz"
-        "ftp://ftp.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.bz2"
-        "rcn-ee.diff.gz::http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${bonerel}/patch-${pkgver}-bone${bonerel}.diff.gz"
-        'config'
-        'change-default-console-loglevel.patch')
-md5sums=('1c738edfc54e7c65faeb90c436104e2f'
-         '412da22dabe4d7fcb78b3c14e53cd892'
-         'ae2bf1e917b54ef8056fab0b9dcf1223'
-         '8c7b92c3e2f502ca7b2f35bca4bb8a33'
-         '9d3c56a4b999c8bfbd4018089a62f662')
+source=("http://www.kernel.org/pub/linux/kernel/v3.x/testing/${_srcname}.tar.xz"
+        "rcn.diff.gz::http://rcn-ee.net/deb/sid-armhf/v${_basekernel}.${_minorrel}-rc${_rcrel}-bone${_bonerel}/patch-${_basekernel}-rc${_rcrel}-bone${_bonerel}.diff.gz"
+        'config')
+md5sums=('a55358abfc6017328b65a08277f33429'
+         '2ad35fd6d891b034fc482d09b17b7d0b'
+         '3369f148f93aa6d13f8db6581aa12b32')
 
 prepare() {
-  cd "${srcdir}/linux-${_basekernel}"
+  cd "${srcdir}/${_srcname}"
 
-  patch -p1 -i "${srcdir}/patch-${pkgver}"
-
-  # set DEFAULT_CONSOLE_LOGLEVEL to 4 (same value as the 'quiet' kernel param)
-  # remove this when a Kconfig knob is made available by upstream
-  # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
-  patch -Np1 -i "${srcdir}/change-default-console-loglevel.patch"
-
-  # BONE patches
-  git init -q  # We need to run following command in a valid Git repo
-  git apply --reject "${srcdir}/rcn-ee.diff"
+  git init -q
+  git apply --reject "${srcdir}/rcn.diff"
 
   cat "${srcdir}/config" > ./.config
 
-  # accept any new stuff in the kernel
-  #yes "" | make config
-
-  # set extraversion to pkgrel
-  sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
+  # add pkgrel to extraversion
+  sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
 }
 
 build() {
-  cd "${srcdir}/linux-${_basekernel}"
+  cd "${srcdir}/${_srcname}"
 
   # get kernel version
   make prepare
@@ -69,7 +56,7 @@ build() {
   # ... or manually edit .config
 
   # Copy back our configuration (use with new kernel version)
-  #cp ./.config ../${_basekernel}.config
+  #cp ./.config ../${pkgbase}.config
 
   ####################
   # stop here
@@ -78,20 +65,21 @@ build() {
   #return 1
   ####################
 
+  #yes "" | make config
+
   # build!
   make ${MAKEFLAGS} zImage modules dtbs
 }
 
-package_linux-am33x() {
-  pkgdesc="The Linux Kernel and modules - am33x processors"
-  depends=('coreutils' 'linux-firmware' 'module-init-tools>=3.16' 'mkinitcpio>=0.7')
+_package() {
+  pkgdesc="The Linux Kernel and modules - ${_desc}"
+  depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
-  provides=('kernel26' 'kernel26-am33x' 'linux=${pkgver}')
-  conflicts=('kernel26-am33x' 'linux-tegra')
-  replaces=('kernel26-am33x')
+  provides=('kernel26' 'linux=${pkgver}' 'aufs_friendly')
+  conflicts=('linux-omap' 'linux-imx6' 'linux-armada370')
   install=${pkgname}.install
 
-  cd "${srcdir}/linux-${_basekernel}"
+  cd "${srcdir}/${_srcname}"
 
   KARCH=arm
 
@@ -129,18 +117,17 @@ package_linux-am33x() {
   mv "$pkgdir/lib" "$pkgdir/usr"
 }
 
-package_linux-headers-am33x() {
-  pkgdesc="Header files and scripts for building modules for linux kernel - am33x processors"
-  provides=('kernel26-headers-am33x' 'linux-headers=${pkgver}')
-  conflicts=('kernel26-headers-am33x' 'linux-headers-tegra')
-  replaces=('kernel26-headers-am33x')
+_package-headers() {
+  pkgdesc="Header files and scripts for building modules for linux kernel - ${_desc}"
+  provides=('linux-headers=${pkgver}')
+  conflicts=('linux-headers-omap' 'linux-headers-imx6')
 
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
 
   cd "${pkgdir}/usr/lib/modules/${_kernver}"
   ln -sf ../../../src/linux-${_kernver} build
 
-  cd "${srcdir}/linux-${_basekernel}"
+  cd "${srcdir}/${_srcname}"
   install -D -m644 Makefile \
     "${pkgdir}/usr/src/linux-${_kernver}/Makefile"
   install -D -m644 kernel/Makefile \
@@ -149,7 +136,8 @@ package_linux-headers-am33x() {
     "${pkgdir}/usr/src/linux-${_kernver}/.config"
 
   mkdir -p "${pkgdir}/usr/src/linux-${_kernver}/include"
-  for i in acpi asm-generic config crypto drm generated keys linux math-emu \
+
+  for i in acpi asm-generic config crypto drm generated linux math-emu \
     media net pcmcia scsi sound trace uapi video xen; do
     cp -a include/${i} "${pkgdir}/usr/src/linux-${_kernver}/include/"
   done
@@ -269,5 +257,12 @@ package_linux-headers-am33x() {
   done
 
   # remove unneeded architectures
-  rm -rf "${pkgdir}"/usr/src/linux-${_kernver}/arch/{alpha,arm26,avr32,blackfin,c6x,cris,frv,h8300,hexagon,ia64,m32r,m68k,m68knommu,mips,microblaze,mn10300,openrisc,parisc,powerpc,ppc,s390,score,sh,sh64,sparc,sparc64,tile,unicore32,um,v850,xtensa,x86}
+  rm -rf "${pkgdir}"/usr/src/linux-${_kernver}/arch/{alpha,arm26,avr32,blackfin,cris,frv,h8300,ia64,m32r,m68k,m68knommu,mips,microblaze,mn10300,parisc,powerpc,ppc,s390,sh,sh64,sparc,sparc64,um,v850,x86,xtensa}
 }
+
+pkgname=("${pkgbase}" "${pkgbase}-headers")
+for _p in ${pkgname[@]}; do
+  eval "package_${_p}() {
+    _package${_p#${pkgbase}}
+  }"
+done
