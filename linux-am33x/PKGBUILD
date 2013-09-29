@@ -1,4 +1,4 @@
-# TI AM335x Beaglebone (Black)
+	# TI AM335x Beaglebone (Black)
 # Maintainer: Michele Damiano Torelli <me_AT_mdtorelli_DOT_it>
 # Contributor: Kevin Mihelich <kevin@archlinuxarm.org>
 
@@ -24,7 +24,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.x/testing/${_srcname}.tar.xz"
         'config')
 md5sums=('a55358abfc6017328b65a08277f33429'
          '2ad35fd6d891b034fc482d09b17b7d0b'
-         '3369f148f93aa6d13f8db6581aa12b32')
+  .      '964f8e91d483235eccf0e81253325631')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
