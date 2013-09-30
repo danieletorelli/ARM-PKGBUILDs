@@ -6,15 +6,10 @@ Kernel 3.12.0-rc2 (Bone patchset 2) for BeagleBone boards
 Status
 ======
 
-Tested
-------
  * I2C: not working
  * MMC: mmc1 working, mmc2 working
  * USB host: working, replugging needs ```lsusb``` to pick new devices, unless you use a hub in between
  * USB gadget: working
-
-Not tested
-----------
  * SPI: untested (reported as working [\[1\]][1])
  * LCDC: untested (not-capebus has support for lcd3, lcd4, lcd7 and dvi capes [\[1\]][1])
  * TS: untested (reported as working [\[1\]][1])
