@@ -10,6 +10,9 @@ Status
  * MMC: mmc1 working, mmc2 working
  * USB host: working, replugging needs ```lsusb``` to pick new devices, unless you use a hub in between
  * USB gadget: working
+
+> 
+
  * SPI: untested (reported as working [\[1\]][1])
  * LCDC: untested (reported as working [\[1\]][1])
  * TS: untested (reported as working [\[1\]][1])
