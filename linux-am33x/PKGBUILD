@@ -1,4 +1,4 @@
-	# TI AM335x Beaglebone (Black)
+# TI AM335x Beaglebone (Black)
 # Maintainer: Michele Damiano Torelli <me_AT_mdtorelli_DOT_it>
 # Contributor: Kevin Mihelich <kevin@archlinuxarm.org>
 
@@ -8,8 +8,8 @@ pkgbase=linux-am33x
 _kernelname=${pkgbase#linux}
 _basekernel=3.12
 _minorrel=0
-_rcrel=3
-_bonerel=3
+_rcrel=6
+_bonerel=7
 _srcname=linux-${_basekernel}-rc${_rcrel}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=${_basekernel}.${_minorrel}
@@ -22,9 +22,9 @@ options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v3.x/testing/${_srcname}.tar.xz"
         "rcn.diff.gz::http://rcn-ee.net/deb/sid-armhf/v${_basekernel}.${_minorrel}-rc${_rcrel}-bone${_bonerel}/patch-${_basekernel}-rc${_rcrel}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('77dbf76528c9daa3e0dfabc8c6ad60cd'
-         '300f4d31d7fd79318f6f5bffd6c1f144'
-         '964f8e91d483235eccf0e81253325631')
+md5sums=('b5acb7731f44f22b67e0b3ce49720ad0'
+         '158907e0a21660b01966a10f47f2ec98'
+         '85542eb56d69a2e6fb87e6a5dd614271')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
