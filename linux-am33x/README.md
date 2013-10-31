@@ -25,4 +25,10 @@ Status
  * Audio: untested (reported as working [\[1\]][1])
  * HDMI audio: untested (reported as working [\[1\]][1])
  
+Bootlog errors
+==============
+
+No major faults found. Kernel is stable.
+
+
 [1]: http://github.com/beagleboard/kernel/tree/3.8     "Beagleboard.org Kernel - 3.8 - Github"
