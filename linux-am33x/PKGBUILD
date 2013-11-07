@@ -8,23 +8,22 @@ pkgbase=linux-am33x
 _kernelname=${pkgbase#linux}
 _basekernel=3.12
 _minorrel=0
-_rcrel=7
 _bonerel=8
-_srcname=linux-${_basekernel}-rc${_rcrel}
+_srcname=linux-${_basekernel}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=${_basekernel}.${_minorrel}
-pkgrel=2
+pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-source=("http://www.kernel.org/pub/linux/kernel/v3.x/testing/${_srcname}.tar.xz"
-        "rcn.diff.gz::http://rcn-ee.net/deb/sid-armhf/v${_basekernel}.${_minorrel}-rc${_rcrel}-bone${_bonerel}/patch-${_basekernel}-rc${_rcrel}-bone${_bonerel}.diff.gz"
+source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
+        "rcn.diff.gz::http://rcn-ee.net/deb/sid-armhf/v${_basekernel}.${_minorrel}-bone${_bonerel}/patch-${_basekernel}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('6288daed651b70897e9742e2e3d29a58'
-         '1a54dd349234a529208a45d97ab801f9'
-         'dc3f4fb3ff7a14ad1394cdc7b17a190a')
+md5sums=('cc6ee608854e0da4b64f6c1ff8b6398c'
+         'b11fa32568cc8defa0951f6dbcf30850'
+         '54fa161ddba71158755eeb505d6e34f9')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
