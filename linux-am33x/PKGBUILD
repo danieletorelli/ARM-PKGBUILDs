@@ -10,8 +10,8 @@ pkgname=('linux-am33x' 'linux-headers-am33x')
 _kernelname=${pkgname#linux}
 _basekernel=3.8
 pkgver=${_basekernel}.13
-pkgrel=11
-bonerel=28
+pkgrel=12
+bonerel=31
 arch=('arm')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -24,8 +24,8 @@ source=("ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-${_basekernel}.tar.xz"
         'change-default-console-loglevel.patch')
 md5sums=('1c738edfc54e7c65faeb90c436104e2f'
          '412da22dabe4d7fcb78b3c14e53cd892'
-         'ae2bf1e917b54ef8056fab0b9dcf1223'
-         '8c7b92c3e2f502ca7b2f35bca4bb8a33'
+         'ee91ce3a2b3988410243846b6234c4a0'
+         'f1c1564707d9c78695e8953a98dfcd48'
          '9d3c56a4b999c8bfbd4018089a62f662')
 
 prepare() {
