@@ -1,10 +1,10 @@
 Kernel 3.8
 ==========
 
-Kernel 3.8.13 (Bone patchset 28) for BeagleBone boards
+Kernel 3.8.13 (Bone patchset 31) for BeagleBone boards
 
-Status
-======
+Status (needs to be updated)
+============================
 
  * I2C: working
  * MMC: mmc1 working, mmc2 working
@@ -25,8 +25,8 @@ Status
  * Audio: untested (reported as working [\[1\]][1])
  * HDMI audio: untested (reported as working [\[1\]][1])
  
-Bootlog errors
-==============
+Bootlog errors (needs to be updated)
+====================================
 
 No major faults found. Kernel is stable.
 
