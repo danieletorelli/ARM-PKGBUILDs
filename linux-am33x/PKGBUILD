@@ -5,31 +5,29 @@
 buildarch=4
 
 pkgbase=linux-am33x
+_srcname=linux-3.12.5
 _kernelname=${pkgbase#linux}
-_basekernel=3.12
-_minorrel=4
-_bonerel=9
-_srcname=linux-${_basekernel}
 _desc="TI AM335x Beaglebone (Black)"
-pkgver=${_basekernel}.${_minorrel}
+pkgver=3.12.5
 pkgrel=1
+_bonerel=10
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
-        "rcn.diff.gz::http://rcn-ee.net/deb/sid-armhf/v${_basekernel}.${_minorrel}-bone${_bonerel}/patch-${_basekernel}.${_minorrel}-bone${_bonerel}.diff.gz"
+        "http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${_bonerel}/patch-${pkgver}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('cc6ee608854e0da4b64f6c1ff8b6398c'
-         '130f74f12e796683ca75d67897523dcb'
-         '6770730816c63035704211bdf697e8c6')
+md5sums=('5b5330f657f562f7bef6da100a7133b1'
+         '0efeb07d5e3af646cd46c75108037ce3'
+         '4ca47f9609c5c517d2a06fdfc7b5582c')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
 
   git init -q
-  git apply --reject "${srcdir}/rcn.diff"
+  git apply --reject "${srcdir}/patch-${pkgver}-bone${_bonerel}.diff"
 
   cat "${srcdir}/config" > ./.config
 
@@ -74,8 +72,8 @@ _package() {
   pkgdesc="The Linux Kernel and modules - ${_desc}"
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
-  provides=('kernel26' 'linux=${pkgver}' 'aufs_friendly')
-  conflicts=('linux-omap' 'linux-imx6' 'linux-armada370')
+  provides=('kernel26' 'linux=${pkgver}')
+  conflicts=('linux-omap' 'linux-imx6' 'linux-armada370' 'linux-am33x-legacy')
   install=${pkgname}.install
 
   cd "${srcdir}/${_srcname}"
@@ -84,6 +82,8 @@ _package() {
 
   # get kernel version
   _kernver="$(make kernelrelease)"
+  _basekernel=${_kernver%%-*}
+  _basekernel=${_basekernel%.*}
 
   mkdir -p "${pkgdir}"/{lib/modules,lib/firmware,boot/dtbs}
   make INSTALL_MOD_PATH="${pkgdir}" modules_install
@@ -119,7 +119,7 @@ _package() {
 _package-headers() {
   pkgdesc="Header files and scripts for building modules for linux kernel - ${_desc}"
   provides=('linux-headers=${pkgver}')
-  conflicts=('linux-headers-omap' 'linux-headers-imx6')
+  conflicts=('linux-headers-omap' 'linux-headers-imx6' 'linux-headers-am33x-legacy')
 
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
 
