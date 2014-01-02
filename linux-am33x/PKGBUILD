@@ -5,29 +5,30 @@
 buildarch=4
 
 pkgbase=linux-am33x
-_srcname=linux-3.12.6
+_srcname=linux-3.13-rc6
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
-pkgver=3.12.6
+pkgver=3.13
 pkgrel=1
-_bonerel=11
+_rcrel=6
+_bonerel=2
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
-        "http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${_bonerel}/patch-${pkgver}-bone${_bonerel}.diff.gz"
+source=("http://www.kernel.org/pub/linux/kernel/v3.x/testing/${_srcname}.tar.xz"
+        "http://rcn-ee.net/deb/sid-armhf/v${pkgver}.0-rc${_rcrel}-bone${_bonerel}/patch-${pkgver}-rc${_rcrel}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('ab2fcc368e20d804e77970196154fb9e'
-         'c6fe3619f6e642f6d89653fccbaac5d2'
-         '8c7b13cf9ade8e73691974372637cf19')
+md5sums=('fb3ffbf05177cdf9c4ef71406177e83b'
+         '999f19f8dd4ae36b9c6f0e6d42a41bc6'
+         '15b136e824a3fbbdb8e029c3d25f8647')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
 
   git init -q
-  git apply --reject "${srcdir}/patch-${pkgver}-bone${_bonerel}.diff"
+  git apply --reject "${srcdir}/patch-${pkgver}-rc${_rcrel}-bone${_bonerel}.diff"
 
   cat "${srcdir}/config" > ./.config
 
