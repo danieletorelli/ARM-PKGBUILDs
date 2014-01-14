@@ -9,8 +9,8 @@ _srcname=linux-3.8.13
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=3.8.13
-pkgrel=15
-_bonerel=35
+pkgrel=16
+_bonerel=36
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -21,8 +21,8 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'config'
         'change-default-console-loglevel.patch')
 md5sums=('2af19d06cd47ec459519159cdd10542d'
-         '03907ab0bd212170ef158dc3a74fe0be'
-         'b4f30a0ba0f25c389a3af72105cdb17e'
+         '358382c2071fc8ca7a02fba9b831a01f'
+         '56390a55c3f90edf073a227d0c33c840'
          '9d3c56a4b999c8bfbd4018089a62f662')
 
 prepare() {
