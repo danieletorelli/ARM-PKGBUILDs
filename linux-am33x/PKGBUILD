@@ -5,13 +5,13 @@
 buildarch=4
 
 pkgbase=linux-am33x
-_srcname=linux-3.13-rc7
+_srcname=linux-3.13-rc8
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=3.13
 pkgrel=1
-_rcrel=7
-_bonerel=3
+_rcrel=8
+_bonerel=4
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -20,9 +20,9 @@ options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v3.x/testing/${_srcname}.tar.xz"
         "http://rcn-ee.net/deb/sid-armhf/v${pkgver}.0-rc${_rcrel}-bone${_bonerel}/patch-${pkgver}-rc${_rcrel}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('a9de953c724974f8842328c4f41ec255'
-         '48c9c2d261e084abd7c6fc995186c193'
-         '15b136e824a3fbbdb8e029c3d25f8647')
+md5sums=('40edeeeb96e351876c526da5171d0313'
+         '08305958f3df9006ef707261c41e992f'
+         'ebc7b2edf0a699f158c144abd7e481df')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
