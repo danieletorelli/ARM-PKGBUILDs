@@ -9,8 +9,8 @@ _srcname=linux-3.8.13
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=3.8.13
-pkgrel=18
-_bonerel=39
+pkgrel=19
+_bonerel=40
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -21,8 +21,8 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'config'
         'change-default-console-loglevel.patch')
 md5sums=('2af19d06cd47ec459519159cdd10542d'
-         'f3744ceebc20e1b9ec4bf5a1f1551293'
-         '56390a55c3f90edf073a227d0c33c840'
+         '6f2fd139a31c62c7e718fd6a02fae008'
+         '33b61867199396abb1fd86a20e7b5f98'
          '9d3c56a4b999c8bfbd4018089a62f662')
 
 prepare() {
@@ -39,8 +39,8 @@ prepare() {
 
   cat "${srcdir}/config" > ./.config
 
-  # add pkgrel to extraversion
-  sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
+  # add bonerel to extraversion
+  sed -ri "s|^(EXTRAVERSION =).*|\1 -bone${_bonerel}|" Makefile
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
