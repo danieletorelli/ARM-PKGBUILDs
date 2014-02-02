@@ -5,35 +5,34 @@
 buildarch=4
 
 pkgbase=linux-am33x
-_srcname=linux-3.13-rc8
+_srcname=linux-3.13.1
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
-pkgver=3.13
+pkgver=3.13.1
 pkgrel=1
-_rcrel=8
-_bonerel=4
+_bonerel=5
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-source=("http://www.kernel.org/pub/linux/kernel/v3.x/testing/${_srcname}.tar.xz"
-        "http://rcn-ee.net/deb/sid-armhf/v${pkgver}.0-rc${_rcrel}-bone${_bonerel}/patch-${pkgver}-rc${_rcrel}-bone${_bonerel}.diff.gz"
+source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
+        "http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${_bonerel}/patch-${pkgver}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('40edeeeb96e351876c526da5171d0313'
-         '08305958f3df9006ef707261c41e992f'
+md5sums=('18f528e5632f0096e642c511722630dc'
+         'e37dfbbc3c45ce8d755be90d9cc5eddd'
          'ebc7b2edf0a699f158c144abd7e481df')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
 
   git init -q
-  git apply --reject "${srcdir}/patch-${pkgver}-rc${_rcrel}-bone${_bonerel}.diff"
+  git apply --reject "${srcdir}/patch-${pkgver}-bone${_bonerel}.diff"
 
   cat "${srcdir}/config" > ./.config
 
-  # add pkgrel to extraversion
-  sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
+  # add bonerel to extraversion
+  sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-bone${_bonerel}|" Makefile
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh

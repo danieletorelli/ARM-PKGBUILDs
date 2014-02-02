@@ -1,7 +1,7 @@
 Kernel 3.13
 ===========
 
-Kernel 3.13.0-rc8 (Bone patchset 4) for BeagleBone boards
+Kernel 3.13.1 (Bone patchset 5) for BeagleBone boards
 
 Status
 ======
