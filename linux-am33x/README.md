@@ -1,7 +1,7 @@
 Kernel 3.13
 ===========
 
-Kernel 3.13.3 (Bone patchset 5) for BeagleBone boards
+Kernel 3.13.4 (Bone patchset 5) for BeagleBone boards
 
 Status
 ======
@@ -39,4 +39,4 @@ Needs to be updated
 No major faults found. Kernel seems to be stable.
 -->
  
-[1]: http://github.com/beagleboard/kernel/tree/3.12     "Beagleboard.org Kernel - 3.12 - Github"
+[1]: http://github.com/beagleboard/kernel/tree/3.13     "Beagleboard.org Kernel - 3.13 - Github"
