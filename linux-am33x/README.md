@@ -6,9 +6,6 @@ Kernel 3.13.6 (Bone patchset 7) for BeagleBone boards
 Status
 ======
 
-Needs to be updated
-
-<!--
  * I2C: not working
  * MMC: mmc1 working, mmc2 working
  * USB host: working
@@ -28,7 +25,6 @@ Needs to be updated
  * Audio: untested (reported as untested [\[1\]][1])
  * HDMI: untested (reported as working [\[1\]][1])
  * HDMI audio: untested (reported as untested [\[1\]][1])
--->
 
 Bootlog errors
 ==============
