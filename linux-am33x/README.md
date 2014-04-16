@@ -1,11 +1,14 @@
-Kernel 3.13
+Kernel 3.14
 ===========
 
-Kernel 3.13.9 (Bone patchset 9) for BeagleBone boards
+Kernel 3.14.0 (Bone patchset 0) for BeagleBone boards
 
 Status
 ======
 
+Needs to be updated
+
+<!---
  * I2C: not working
  * MMC: mmc1 working, mmc2 working
  * USB host: working
@@ -25,14 +28,17 @@ Status
  * Audio: untested (reported as untested [\[1\]][1])
  * HDMI: untested (reported as working [\[1\]][1])
  * HDMI audio: untested (reported as untested [\[1\]][1])
+-->
 
 Bootlog errors
 ==============
 
 Needs to be updated
 
-<!--
+<!---
 No major faults found. Kernel seems to be stable.
 -->
- 
+
+<!---
 [1]: http://github.com/beagleboard/kernel/tree/3.13     "Beagleboard.org Kernel - 3.13 - Github"
+-->
