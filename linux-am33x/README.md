@@ -1,7 +1,7 @@
 Kernel 3.14
 ===========
 
-Kernel 3.14.0 (Bone patchset 0) for BeagleBone boards
+Kernel 3.14.1 (Bone patchset 2) for BeagleBone boards
 
 Status
 ======
