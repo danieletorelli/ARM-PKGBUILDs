@@ -9,20 +9,20 @@ _srcname=linux-3.8.13
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=3.8.13
-pkgrel=27
-_bonerel=50
+pkgrel=28
+_bonerel=54
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
-makedepends=('xmlto' 'docbook-xsl' 'uboot-mkimage' 'git' 'inetutils')
+makedepends=('xmlto' 'docbook-xsl' 'uboot-mkimage' 'lzop' 'git' 'inetutils')
 options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${_bonerel}/patch-${pkgver}-bone${_bonerel}.diff.gz"
         'config'
         'change-default-console-loglevel.patch')
 md5sums=('2af19d06cd47ec459519159cdd10542d'
-         '38e669486c4381dd83b70662b39da245'
-         'e4979ee8c8a8ef1eb97240708c7bc6fc'
+         '05f6281a51a409e5ba39fb9fa0e3e29f'
+         'ad90439aeffed7d2ce554a66f1c31f61'
          '9d3c56a4b999c8bfbd4018089a62f662')
 
 prepare() {
@@ -38,6 +38,9 @@ prepare() {
   git apply --reject "${srcdir}/patch-${pkgver}-bone${_bonerel}.diff"
 
   cat "${srcdir}/config" > ./.config
+
+  # accept any new stuff in the kernel
+  #yes "" | make config
 
   # add bonerel to extraversion
   sed -ri "s|^(EXTRAVERSION =).*|\1 -bone${_bonerel}|" Makefile
@@ -70,8 +73,6 @@ build() {
   #return 1
   ####################
 
-  #yes "" | make config
-
   # build!
   make ${MAKEFLAGS} zImage modules dtbs
 }
@@ -81,7 +82,7 @@ _package() {
   depends=('coreutils' 'linux-firmware' 'module-init-tools>=3.16' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=('kernel26' 'kernel26-am33x' 'linux=${pkgver}')
-  conflicts=('kernel26-am33x' 'linux-tegra')
+  conflicts=('kernel26-am33x' 'linux')
   replaces=('kernel26-am33x')
   install=${pkgname}.install
 
@@ -106,7 +107,7 @@ _package() {
   # remove build and source links
   rm -f "${pkgdir}"/lib/modules/${_kernver}/{source,build}
   # remove the firmware
-  rm -rf "${pkgdir}/lib/firmware"
+  rm -rf "${pkgdir}"/lib/firmware/*
   # gzip -9 all modules to save 100MB of space
   find "${pkgdir}" -name '*.ko' |xargs -P 2 -n 1 gzip -9
   # make room for external modules
@@ -114,6 +115,8 @@ _package() {
   # add real version for building modules and running depmod from post_install/upgrade
   mkdir -p "${pkgdir}/lib/modules/extramodules-${_basekernel}-${_kernelname:-ARCH}"
   echo "${_kernver}" > "${pkgdir}/lib/modules/extramodules-${_basekernel}-${_kernelname:-ARCH}/version"
+  # copy beaglebone cape dtbo's
+  cp firmware/*.dtbo "${pkgdir}/lib/firmware"
 
   # Now we call depmod...
   depmod -b "$pkgdir" -F System.map "$_kernver"
@@ -126,7 +129,7 @@ _package() {
 _package-headers() {
   pkgdesc="Header files and scripts for building modules for linux kernel - ${_desc}"
   provides=('kernel26-headers-am33x' 'linux-headers=${pkgver}')
-  conflicts=('kernel26-headers-am33x' 'linux-headers-tegra')
+  conflicts=('kernel26-headers-am33x' 'linux-headers')
   replaces=('kernel26-headers-am33x')
 
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
