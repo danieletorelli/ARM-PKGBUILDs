@@ -5,12 +5,13 @@
 buildarch=4
 
 pkgbase=linux-am33x
+pkgname=('linux-am33x' 'linux-headers-am33x')
 _srcname=linux-3.8.13
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=3.8.13
-pkgrel=32
-_bonerel=59
+pkgrel=33
+_bonerel=60
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -21,7 +22,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'config'
         'change-default-console-loglevel.patch')
 md5sums=('2af19d06cd47ec459519159cdd10542d'
-         'ba3c801176060e09ec984624f6483039'
+         'cb70bcd8b792cbfb0cfb4b5ee0f4fb5a'
          'f21193ddabccb6634356cd3cf8681ac5'
          '9d3c56a4b999c8bfbd4018089a62f662')
 
@@ -77,13 +78,12 @@ build() {
   make ${MAKEFLAGS} zImage modules dtbs
 }
 
-_package() {
+package_linux-am33x() {
   pkgdesc="The Linux Kernel and modules - ${_desc}"
   depends=('coreutils' 'linux-firmware' 'module-init-tools>=3.16' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
-  provides=('kernel26' 'kernel26-am33x' 'linux=${pkgver}')
-  conflicts=('kernel26-am33x' 'linux')
-  replaces=('kernel26-am33x')
+  provides=('kernel26' 'kernel26-am33x' "linux=${pkgver}")
+  conflicts=('linux')
   install=${pkgname}.install
 
   cd "${srcdir}/${_srcname}"
@@ -126,11 +126,10 @@ _package() {
   mv "$pkgdir/lib" "$pkgdir/usr"
 }
 
-_package-headers() {
+package_linux-headers-am33x() {
   pkgdesc="Header files and scripts for building modules for linux kernel - ${_desc}"
-  provides=('kernel26-headers-am33x' 'linux-headers=${pkgver}')
-  conflicts=('kernel26-headers-am33x' 'linux-headers')
-  replaces=('kernel26-headers-am33x')
+  provides=('kernel26-headers-am33x' "linux-headers=${pkgver}")
+  conflicts=('linux-headers')
 
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
 
@@ -269,10 +268,3 @@ _package-headers() {
   # remove unneeded architectures
   rm -rf "${pkgdir}"/usr/src/linux-${_kernver}/arch/{alpha,arm26,avr32,blackfin,c6x,cris,frv,h8300,hexagon,ia64,m32r,m68k,m68knommu,mips,microblaze,mn10300,openrisc,parisc,powerpc,ppc,s390,score,sh,sh64,sparc,sparc64,tile,unicore32,um,v850,xtensa,x86}
 }
-
-pkgname=("${pkgbase}" "${pkgbase}-headers")
-for _p in ${pkgname[@]}; do
-  eval "package_${_p}() {
-    _package${_p#${pkgbase}}
-  }"
-done
