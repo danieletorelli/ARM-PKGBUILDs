@@ -5,24 +5,24 @@
 buildarch=4
 
 pkgbase=linux-am33x
-_kernelver=3.14.4
+_kernelver=3.17
 _srcname=linux-${_kernelver}
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
-pkgver=3.14.4
-pkgrel=2
+pkgver=3.17.0
+pkgrel=1
 _bonerel=4
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
-makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
+makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git' 'lzop')
 options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${_bonerel}/patch-${_kernelver}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('c7c565d14833550faa39ef8279272182'
-         'ea7ff785da31668415160dcaa42e02a7'
-         '90be58455fed61e71bd73c14688f25b3')
+md5sums=('fb30d0f29214d75cddd2faa94f73d5cf'
+         '8f7f7f0e3a21b770adb3b75d5b23f92b'
+         '1613648e679f9421dbd4995b12317253')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
@@ -73,7 +73,7 @@ _package() {
   pkgdesc="The Linux Kernel and modules - ${_desc}"
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
-  provides=('kernel26' 'linux=${pkgver}')
+  provides=('kernel26' "linux=${pkgver}")
   conflicts=('linux')
   install=${pkgname}.install
 
@@ -119,7 +119,7 @@ _package() {
 
 _package-headers() {
   pkgdesc="Header files and scripts for building modules for linux kernel - ${_desc}"
-  provides=('linux-headers=${pkgver}')
+  provides=("linux-headers=${pkgver}")
   conflicts=('linux-headers')
 
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
@@ -140,12 +140,12 @@ _package-headers() {
   done
 
   # copy arch includes for external modules
-  mkdir -p ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH
-  cp -a arch/$KARCH/include ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/
-  mkdir -p ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/mach-omap2
-  cp -a arch/$KARCH/mach-omap2/include ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/mach-omap2/
-  mkdir -p ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/plat-omap
-  cp -a arch/$KARCH/plat-omap/include ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/plat-omap/
+  mkdir -p ${pkgdir}/usr/lib/modules/${_kernver}/build/arch/$KARCH
+  cp -a arch/$KARCH/include ${pkgdir}/usr/lib/modules/${_kernver}/build/arch/$KARCH/
+  mkdir -p ${pkgdir}/usr/lib/modules/${_kernver}/build/arch/$KARCH/mach-omap2
+  cp -a arch/$KARCH/mach-omap2/include ${pkgdir}/usr/lib/modules/${_kernver}/build/arch/$KARCH/mach-omap2/
+  mkdir -p ${pkgdir}/usr/lib/modules/${_kernver}/build/arch/$KARCH/plat-omap
+  cp -a arch/$KARCH/plat-omap/include ${pkgdir}/usr/lib/modules/${_kernver}/build/arch/$KARCH/plat-omap/
 
   # copy files necessary for later builds, like nvidia and vmware
   cp Module.symvers "${pkgdir}/usr/lib/modules/${_kernver}/build"
@@ -208,7 +208,6 @@ _package-headers() {
   # add xfs and shmem for aufs building
   mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/fs/xfs"
   mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/mm"
-  cp fs/xfs/xfs_sb.h "${pkgdir}/usr/lib/modules/${_kernver}/build/fs/xfs/xfs_sb.h"
 
   # copy in Kconfig files
   for i in $(find . -name "Kconfig*"); do
