@@ -5,13 +5,13 @@
 buildarch=4
 
 pkgbase=linux-am33x
-_kernelver=3.17.1
+_kernelver=3.17.2
 _srcname=linux-${_kernelver}
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
-pkgver=3.17.1
+pkgver=3.17.2
 pkgrel=1
-_bonerel=4
+_bonerel=5
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -20,8 +20,8 @@ options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "http://rcn-ee.net/deb/sid-armhf/v${pkgver}-bone${_bonerel}/patch-${_kernelver}-bone${_bonerel}.diff.gz"
         'config')
-md5sums=('51765eb37215681798f0bd13450f49ef'
-         '06d30910ba6048684bbc17c1906338e7'
+md5sums=('87444e6f0906e2ec783cf0ed6aab1a56'
+         '5dc7c4ae822effa68465a5f9aac6d096'
          '1613648e679f9421dbd4995b12317253')
 
 prepare() {
