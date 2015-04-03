@@ -2,7 +2,7 @@
 # arg 2:  the old package version
 
 KERNEL_NAME=-am33x
-KERNEL_VERSION=3.19.0-bone3
+KERNEL_VERSION=3.19.3-bone4
 
 post_install () {
   # updating module dependencies
