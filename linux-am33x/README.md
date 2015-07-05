@@ -1,9 +1,9 @@
-Kernel 3.8
+Kernel 4.1
 ==========
 
-Kernel 3.8.13 (Bone patchset 72) for BeagleBone boards.
+Kernel 4.1.1 (Bone patchset 9) for BeagleBone boards.
 
 __________
 *Refer [here][1] for the official BeagleBone kernel repository.*
 
-[1]: http://github.com/beagleboard/linux/tree/3.8     "Beagleboard.org Kernel - 3.8 - Github"
+[1]: https://github.com/beagleboard/linux/tree/4.1     "Beagleboard.org Kernel - 4.1 - Github"
