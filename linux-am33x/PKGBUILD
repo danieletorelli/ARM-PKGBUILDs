@@ -9,8 +9,8 @@ _srcname=linux-4.1.1
 _kernelname=${pkgbase#linux}
 _desc="TI AM335x Beaglebone (Black)"
 pkgver=4.1.1
-pkgrel=1
-_bonerel=9
+pkgrel=2
+_bonerel=10
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -20,8 +20,8 @@ source=("http://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar.xz"
         "http://rcn-ee.com/deb/sid-armhf/v${pkgver}-bone${_bonerel}/patch-${pkgver}-bone${_bonerel}.diff.gz"
         'config')
 md5sums=('bf83da42349ab7fe77c61b5d10d9f003'
-         'efc0a076bccc9648ce26ad7733f14ea8'
-         '18e4d5a63b342cf930c9bf5695a9454c')
+         '1a0bb8a0cd40457b0d52f1cf1b0a3bb9'
+         '0a24a6c2b955599b48902bd858336cb0')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
@@ -39,10 +39,6 @@ prepare() {
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
-}
-
-build() {
-  cd "${srcdir}/${_srcname}"
 
   # get kernel version
   make prepare
@@ -66,6 +62,10 @@ build() {
   ####################
 
   #yes "" | make config
+}
+
+build() {
+  cd "${srcdir}/${_srcname}"
 
   # build!
   make ${MAKEFLAGS} zImage modules dtbs
